@@ -1,3 +1,25 @@
-name: signal-bot
-region: us-east-1
-yamlVersion: 2
+name: signal-app
+backend:
+  path: .
+  language: python
+  runtime: python3.9
+  main: app.py
+  wsgi: app
+  requirements:
+    - flask==2.0.1
+  staticFolder: static
+  templatesFolder: templates
+  env:
+    - SIGNALS_FILE=signals.json
+
+scripts:
+  preBackendDeploy:
+    - pip install -r requirements.txt
+
+ignore:
+  - "*.pyc"
+  - "__pycache__"
+  - ".env"
+  - ".git"
+  - ".gitignore"
+  - "signals.json"
