@@ -1,37 +1,33 @@
 name: signal-app
 region: us-east-1
-frontend:
-  directory: static
-  build:
-    - npm install
-    - npm run build
-  deploy:
-    - build/**
 
-backend:
-  - name: signal-service
-    runtime: python3.9
-    path: .
-    entry: app.py
-    wsgi: app
-    environment:
-      - SIGNALS_FILE=signals.json
-    triggers:
-      - http:
-          cors: true
-          path: /api
-    packages:
-      - flask==2.0.1
+projects:
+  backend:
+    - name: signal-service
+      language: python
+      path: .
+      sdk:
+        language: python
+      type: http
+      platform: flask
+      entrypoint: app.py
+      wsgi: app
+      runtime: python3.9
+      parameters:
+        env:
+          - SIGNALS_FILE=signals.json
+      scripts:
+        predeploy: pip install -r requirements.txt
 
-scripts:
-  preBackendDeploy:
-    - pip install -r requirements.txt
+      cloudProvider: aws
+      dependencies:
+        - flask==2.0.1
 
-ignore:
-  - "*.pyc"
-  - "__pycache__"
-  - ".env"
-  - ".git"
-  - ".gitignore"
-  - "signals.json"
-  - "node_modules"
+  frontend:
+    - name: signal-frontend
+      language: html
+      path: static
+      type: static
+      platform: html
+      buildCommand: ""
+      serveCommand: ""
