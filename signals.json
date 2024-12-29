@@ -1,0 +1,15 @@
+{
+    "signals": {
+        "total_today": 16,
+        "normal_signals": 13,
+        "medium_signals": 2,
+        "high_signals": 1
+    },
+    "stats": {
+        "today_signals": 0,
+        "win_rate": 95,
+        "accuracy": 93,
+        "status": "ACTIVE"
+    },
+    "last_reset": "2024-12-29"
+}

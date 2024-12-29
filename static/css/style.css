@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Russo One', sans-serif;
+}
+
+.theme-crash {
+    background: linear-gradient(135deg, #1f0c3a 0%, #4a0f52 100%);
+    --accent-color: #ff2d55;
+    --accent-glow: rgba(255, 45, 85, 0.3);
+    --card-bg: rgba(31, 12, 58, 0.85);
+    --success-color: #00ff9d;
+    --button-gradient: linear-gradient(45deg, #ff2d55, #ff617d);
+    --text-color: #e0e0e0;
+    --snow-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.theme-aviator {
+    background: linear-gradient(135deg, #0a1b3f 0%, #1e3a7d 100%);
+    --accent-color: #00c3ff;
+    --accent-glow: rgba(0, 195, 255, 0.3);
+    --card-bg: rgba(10, 27, 63, 0.85);
+    --success-color: #00ff9d;
+    --button-gradient: linear-gradient(45deg, #00c3ff, #0077ff);
+    --text-color: #e0e0e0;
+    --snow-color: rgba(255, 255, 255, 0.5);
+}
+/* Qor effekti */
+.snowfall {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.snowflake {
+    position: absolute;
+    background: var(--snow-color);
+    border-radius: 50%;
+    opacity: 0;
+    animation: snowfall linear infinite;
+}
+/* Qor animatsiyasi */
+@keyframes snowfall {
+    0% {
+        transform: translateY(-10vh) translateX(-20px);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(20px);
+        opacity: 0.3;
+    }
+}
+
+
+#canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 30px; /* Marginni oshiramiz */
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.game-title {
+    font-size: 4em; /* 2.5em dan 4em ga o'zgartiramiz */
+    color: var(--accent-color);
+    text-shadow: 0 0 30px var(--accent-glow); /* Shadow kuchaytirdik */
+    margin-bottom: 20px; /* Margin oshirdik */
+    letter-spacing: 2px; /* Harflar orasini ochish */
+}
+
+.game-badge {
+    display: inline-block;
+    padding: 12px 30px; /* Padding oshirdik */
+    border-radius: 25px; /* Border radius oshirdik */
+    background: var(--accent-glow);
+    color: var(--accent-color);
+    font-size: 1.8em; /* 1.2em dan 1.8em ga o'zgartirdik */
+    text-transform: uppercase;
+    animation: pulseScale 2s infinite;
+    letter-spacing: 3px; /* Harflar orasini ochish */
+    font-weight: bold; /* Qalinroq shrift */
+}
+
+.game-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    width: 100%;
+    height: 100%;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 0 32px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.multiplier {
+    font-size: 4em;
+    font-weight: bold;
+    margin: 10px 0;
+    background: linear-gradient(45deg, var(--accent-color), var(--success-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px var(--accent-glow);
+    animation: pulseText 2s infinite;
+    text-align: center;
+}
+
+.multiplier, .countdown {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+}
+
+.multiplier.show, .countdown.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Rocket va uning effektlari */
+.rocket-container {
+    text-align: center;
+    height: 300px; /* 200px dan 300px ga oshirildi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.rocket {
+    width: 180px; /* 120px dan 180px ga oshirildi */
+    height: auto;
+    transform-origin: center bottom;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    transition: all 0.3s ease;
+}
+
+.rocket.flying {
+    animation: rocketFly 1s infinite alternate ease-in-out;
+    filter: 
+        drop-shadow(0 0 20px var(--accent-glow))
+        brightness(1.3)
+        contrast(1.1);
+}
+
+.rocket.landing {
+    animation: rocketLand 0.8s forwards ease-out;
+}
+
+@keyframes rocketFly {
+    0% {
+        transform: translateY(0) rotate(-2deg) scale(1);
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)) brightness(1);
+    }
+    100% {
+        transform: translateY(-30px) rotate(2deg) scale(1.1);
+        filter: drop-shadow(0 10px 25px var(--accent-glow)) brightness(1.4);
+    }
+}
+
+@keyframes rocketLand {
+    0% {
+        transform: translateY(-30px) rotate(2deg) scale(1.1);
+        filter: drop-shadow(0 10px 25px var(--accent-glow)) brightness(1.4);
+    }
+    50% {
+        transform: translateY(-40px) rotate(-2deg) scale(1.1);
+    }
+    100% {
+        transform: translateY(0) rotate(0) scale(1);
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)) brightness(1);
+    }
+}
+
+@keyframes rocketFlyingAnimation {
+    0% {
+        transform: translateY(0) rotate(-1deg);
+    }
+    100% {
+        transform: translateY(-30px) rotate(1deg);
+    }
+}
+
+
+.countdown {
+    font-size: 2.5em;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px var(--accent-glow);
+    text-align: center;
+    margin: 10px 0;
+}
+
+.signal-btn {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    font-size: 1.3em;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background: var(--button-gradient);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 20px var(--accent-glow);
+}
+
+.signal-btn:not(:disabled)::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+}
+
+.signal-btn:disabled {
+    opacity: 0.8;
+    cursor: wait;
+}
+
+.progress-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform-origin: left;
+    transition: transform 0.1s linear;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 25px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    width: 100%;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.stat-value {
+    font-size: 1.8em;
+    color: var(--success-color);
+    margin-top: 5px;
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatCard {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulseScale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes pulseText {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes shimmer {
+    0% { transform: translate(-100%, -100%) rotate(45deg); }
+    100% { transform: translate(100%, 100%) rotate(45deg); }
+}
+
+.signal-active {
+    animation: activeSignal 1s infinite;
+}
+
+@keyframes activeSignal {
+    0%, 100% { box-shadow: 0 5px 20px var(--accent-glow); }
+    50% { box-shadow: 0 5px 40px var(--accent-glow); }
+}

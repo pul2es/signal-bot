@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="theme-crash">
+    <div id="canvas-container"></div>
+    <div class="snowfall"></div>
+    
+    <div class="container">
+        <div class="game-header">
+            <h1 id="bookmakerName" class="game-title">{{ bookmaker|upper }}</h1>
+            <div id="gameType" class="game-badge">{{ game|upper }}</div>
+        </div>
+    
+        <div class="game-card" style="padding: 30px;">
+            <div class="rocket-container">
+                <img src="{{ url_for('static', filename='images/rocket.svg') }}" class="rocket" alt="rocket">
+            </div>
+            <div class="multiplier" id="currentMultiplier" style="display: none;"></div>
+            <div class="countdown" id="countdown" style="display: none;"></div>
+            <div style="text-align: center; color: #888; display: none;" id="timeRemaining">Qolgan vaqt</div>
+        </div>
+    
+        <button id="getSignal" class="signal-btn">
+            <div class="progress-overlay" id="progress"></div>
+            <span id="buttonText">SIGNAL OLISH</span>
+        </button>
+    
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div style="color: #888;" id="todaySignals">Bugungi signallar</div>
+                <div class="stat-value" id="todaySignalsValue">{{ stats.today_signals }}</div>
+            </div>
+            <div class="stat-card">
+                <div style="color: #888;" id="winRate">G'alaba foizi</div>
+                <div class="stat-value" id="winRateValue">{{ stats.win_rate }}%</div>
+            </div>
+            <div class="stat-card">
+                <div style="color: #888;" id="accuracy">Aniqlik</div>
+                <div class="stat-value" id="accuracyValue">{{ stats.accuracy }}%</div>
+            </div>
+            <div class="stat-card">
+                <div style="color: #888;" id="status">Holat</div>
+                <div class="stat-value" id="statusValue" style="color: var(--accent-color);">{{ stats.status }}</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pass Flask variables to JavaScript
+        const game = "{{ game }}";
+        const bookmaker = "{{ bookmaker }}";
+        const lang = "{{ lang }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
